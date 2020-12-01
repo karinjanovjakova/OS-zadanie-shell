@@ -1,0 +1,16 @@
+#!/bin/bash
+cat<< THE_END
+set terminal wxt
+set xdata time
+set timefmt '%H-%M'
+set xtics format '%H:%M'
+plot '-' using 1:2 with boxes
+THE_END
+while read line
+do
+    tep=$(echo "$line" | cut -f 6 -d ,)
+    hod=$(echo "$line" | cut -f 3 -d , | cut -c12-13)
+    min=$(echo "$line" | cut -f 3 -d , | cut -c15-16)
+    echo ""$hod"-"$min" "$tep""
+done
+echo e

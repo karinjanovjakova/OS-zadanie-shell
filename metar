@@ -1,0 +1,35 @@
+#!/bin/bash
+
+if [ "$#" = "2" ]; then
+    #echo kod letiska je "$2"
+    let="$2"
+    #echo kod letiska je "$let"
+    D=$(echo "$1" | cut -c1-2)
+    M=$(echo "$1" | cut -c4-5)
+    Y=$(echo "$1" | cut -c7-10)
+    datum=""$M"/"$D"/"$Y""
+    #echo "$datum"
+    START=$(echo $(date -d "$datum" +'%s'))
+    #echo zaciatok dna v s "$START"
+    END=$(echo "$START"+60*60*24 | bc )
+    #echo koniec dna v s "$END"
+    curl -s 'https://aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=csv&startTime='"$START"'&endTime='"$END"'&stationString='"$let"'' | grep "$let"
+elif [ "$#" = "1" ]; then
+    let="$1"
+    #echo kod letiska je "$let"
+    date=$(date -d yesterday +"%d-%m-%Y")
+    #echo "$date"
+    D=$(echo "$date" | cut -c1-2)
+    M=$(echo "$date" | cut -c4-5)
+    Y=$(echo "$date" | cut -c7-10)
+    datum=""$M"/"$D"/"$Y""
+    START=$(echo $(date -d "$datum" +'%s'))
+    #echo zaciatok dna v s "$START"
+    END=$(echo "$START"+60*60*24 | bc )
+    #echo koniec dna v s "$END"
+    curl -s 'https://aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=csv&startTime='"$START"'&endTime='"$END"'&stationString='"$let"'' | grep "$let"
+
+
+else 
+    echo nespravny pocet argumentov
+fi
